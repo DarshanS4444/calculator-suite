@@ -9,6 +9,9 @@ playwright-report/
 blob-report/
 playwright/.cache/
 
+# Test Reports (exclude latest, keep archived reports for submission)
+reports/latest/
+
 # IDE
 .vscode/
 .idea/
