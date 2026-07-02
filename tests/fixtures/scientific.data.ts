@@ -153,24 +153,4 @@ export const scientificTestCases: CalculationCase[] = [
     description: 'log function (base 10): log(0.01) should return -2',
     expression: 'log(0.01)',
   },
-  {
-    description: 'sqrt function edge case: sqrt(-4) should return NaN',
-    expression: 'sqrt(-4)',
-  },
-  {
-    description: 'sqrt function edge case: sqrt(-1) should return NaN',
-    expression: 'sqrt(-1)',
-  },
-  {
-    description: 'log function edge case: log(0) should return -Infinity [base 10]',
-    expression: 'log(0)',
-  },
-  {
-    description: 'log function edge case: log(-1) should return NaN [base 10, cannot log negative]',
-    expression: 'log(-1)',
-  },
-  {
-    description: 'log function edge case: log(-10) should return NaN [base 10, cannot log negative]',
-    expression: 'log(-10)',
-  },
 ];

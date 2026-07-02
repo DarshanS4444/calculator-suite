@@ -62,4 +62,24 @@ export const edgeCasesTestCases: CalculationCase[] = [
     description: 'very small decimal: 0.0001 + 0.0001 should return 0.0002',
     expression: '0.0001+0.0001',
   },
+  {
+    description: 'sqrt function edge case: sqrt(-4) should return NaN',
+    expression: 'sqrt(-4)',
+  },
+  {
+    description: 'sqrt function edge case: sqrt(-1) should return NaN',
+    expression: 'sqrt(-1)',
+  },
+  {
+    description: 'log function edge case: log(0) should return -Infinity [base 10]',
+    expression: 'log(0)',
+  },
+  {
+    description: 'log function edge case: log(-1) should return NaN [base 10, cannot log negative]',
+    expression: 'log(-1)',
+  },
+  {
+    description: 'log function edge case: log(-10) should return NaN [base 10, cannot log negative]',
+    expression: 'log(-10)',
+  },
 ];
