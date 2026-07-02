@@ -82,4 +82,12 @@ export const edgeCasesTestCases: CalculationCase[] = [
     description: 'log function edge case: log(-10) should return NaN [base 10, cannot log negative]',
     expression: 'log(-10)',
   },
+  {
+    description: 'BUG-008: empty input then equals should not display "undefined"',
+    expression: '',
+  },
+  {
+    description: 'BUG-009: cos(90) in radians should return -0.448, not 0 (degree mode expected)',
+    expression: 'cos(90)',
+  },
 ];

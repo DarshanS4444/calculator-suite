@@ -15,4 +15,9 @@ test.describe('Edge Cases - Regression Tests', () => {
       await bl.executeAndVerifyCalculationCase(testCase);
     });
   }
+
+  test('BUG-011: error state not reset - digit after error should clear display', async () => {
+    await bl.verifyAppLoads();
+    await bl.verifyErrorStateReset();
+  });
 });

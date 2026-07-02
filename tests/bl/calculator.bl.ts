@@ -138,4 +138,18 @@ export class CalculatorBL {
 
     expect(parseFloat(actualResult)).toBeCloseTo(expectedResult, 5);
   }
+
+  async verifyErrorStateReset(): Promise<void> {
+    await this.page.clickClear();
+    await this.page.clickFunction('cos');
+    await this.page.clickEquals();
+
+    const errorDisplay = await this.page.getDisplayValue();
+    expect(errorDisplay).toBe('Error');
+
+    await this.page.clickDigit('5');
+    const afterDigitDisplay = await this.page.getDisplayValue();
+
+    expect(afterDigitDisplay).toBe('5');
+  }
 }
