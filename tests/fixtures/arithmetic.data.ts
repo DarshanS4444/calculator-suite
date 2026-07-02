@@ -30,12 +30,12 @@ export const arithmeticTestCases: CalculationCase[] = [
     expression: '10-5',
   },
   {
-    description: 'subtraction: 100 − 30 should return 70',
-    expression: '100-30',
+    description: 'subtraction: 100 − 40 should return 60',
+    expression: '100-40',
   },
   {
-    description: 'decimal addition: 2.5 + 3.5 should return 6',
-    expression: '2.5+3.5',
+    description: 'decimal addition: 2.5 + 5.5 should return 8',
+    expression: '2.5+5.5',
   },
   {
     description: 'decimal multiplication: 2.5 × 4 should return 10',
@@ -46,32 +46,36 @@ export const arithmeticTestCases: CalculationCase[] = [
     expression: '7.5/2.5',
   },
   {
-    description: 'chained operations: 1 + 2 + 3 should return 6',
-    expression: '1+2+3',
+    description: 'chained operations: 1 + 2 + 4 should return 7',
+    expression: '1+2+4',
   },
   {
-    description: 'chained operations: 2 × 3 × 4 should return 24',
-    expression: '2*3*4',
+    description: 'chained operations: 2 × 5 × 4 should return 40',
+    expression: '2*5*4',
   },
   {
-    description: 'operator precedence: 2 + 3 × 4 should return 14',
-    expression: '2+3*4',
+    description: 'operator precedence: 2 + 5 × 4 should return 22',
+    expression: '2+5*4',
   },
   {
     description: 'operator precedence: 10 − 2 × 3 should return 4',
     expression: '10-2*3',
   },
   {
-    description: 'parentheses: (2 + 3) × 4 should return 20',
-    expression: '(2+3)*4',
+    description: 'parentheses: (2 + 2) × 4 should return 16',
+    expression: '(2+2)*4',
   },
   {
     description: 'parentheses: 10 ÷ (2 + 3) should return 2',
     expression: '10/(2+3)',
   },
   {
-    description: 'nested parentheses: ((2 + 3) × 4) should return 20',
-    expression: '((2+3)*4)',
+    description: 'nested parentheses: ((2 + 2) × 4) × 2 should return 32',
+    expression: '((2+2)*4)*2',
+  },
+  {
+    description: 'decimal precision: 10 ÷ 7 should return 1.428571...',
+    expression: '10/7',
   },
   {
     description: 'digit entry: 3 should display 3',

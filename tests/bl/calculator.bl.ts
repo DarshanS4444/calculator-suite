@@ -1,5 +1,6 @@
 import { Page, expect } from '@playwright/test';
 import { CalculatorPage } from '../pages/calculator.page';
+import { CalculationCase } from '../fixtures/types';
 
 export class CalculatorBL {
   private page: CalculatorPage;
@@ -62,5 +63,39 @@ export class CalculatorBL {
 
     const displayValue = await this.page.getDisplayValue();
     expect(displayValue).toBe(expectedResult.toString());
+  }
+
+  async executeAndVerifyCalculationCase(testCase: CalculationCase): Promise<void> {
+    let expectedResult: number;
+    try {
+      expectedResult = eval(testCase.expression);
+    } catch (error) {
+      throw new Error(
+        `Invalid expression in test data: "${testCase.expression}". ` +
+        `Reason: ${error instanceof Error ? error.message : String(error)}. ` +
+        `Please recheck the fixture.`
+      );
+    }
+
+    await this.page.clickClear();
+
+    for (const char of testCase.expression) {
+      if (char === '+' || char === '-' || char === '*' || char === '/') {
+        await this.page.clickOperator(char as any);
+      } else if (char === '(' || char === ')') {
+        await this.page.clickParenthesis(char as any);
+      } else if (char === '.') {
+        await this.page.clickDigit('.');
+      } else {
+        await this.page.clickDigit(char);
+      }
+      await new Promise(resolve => setTimeout(resolve, 30));
+    }
+
+    await this.page.clickEquals();
+
+    const actualResult = await this.page.getDisplayValue();
+
+    expect(parseFloat(actualResult)).toBeCloseTo(expectedResult, 5);
   }
 }
