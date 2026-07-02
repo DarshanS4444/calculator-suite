@@ -65,17 +65,22 @@ export class CalculatorBL {
     expect(displayValue).toBe(expectedResult.toString());
   }
 
-  async executeAndVerifyCalculationCase(testCase: CalculationCase): Promise<void> {
-    let expectedResult: number;
+  private evaluateExpression(expression: string): number {
+    const { sin, cos, tan, sqrt } = Math;
+    const log = Math.log10;
     try {
-      expectedResult = eval(testCase.expression);
+      return eval(expression);
     } catch (error) {
       throw new Error(
-        `Invalid expression in test data: "${testCase.expression}". ` +
+        `Invalid expression in test data: "${expression}". ` +
         `Reason: ${error instanceof Error ? error.message : String(error)}. ` +
         `Please recheck the fixture.`
       );
     }
+  }
+
+  async executeAndVerifyCalculationCase(testCase: CalculationCase): Promise<void> {
+    const expectedResult = this.evaluateExpression(testCase.expression);
 
     await this.page.clickClear();
 
@@ -92,6 +97,41 @@ export class CalculatorBL {
       await new Promise(resolve => setTimeout(resolve, 30));
     }
 
+    await this.page.clickEquals();
+
+    const actualResult = await this.page.getDisplayValue();
+
+    expect(parseFloat(actualResult)).toBeCloseTo(expectedResult, 5);
+  }
+
+  async executeAndVerifyScientificCase(testCase: CalculationCase): Promise<void> {
+    const match = testCase.expression.match(/^(sin|cos|tan|sqrt|log)\((.+)\)$/);
+    if (!match) {
+      throw new Error(
+        `Invalid scientific expression in test data: "${testCase.expression}". ` +
+        `Expected format: functionName(input). Please recheck the fixture.`
+      );
+    }
+
+    const [, fnName, inputStr] = match;
+    const fn = fnName as 'sin' | 'cos' | 'tan' | 'sqrt' | 'log';
+
+    const expectedResult = this.evaluateExpression(testCase.expression);
+
+    await this.page.clickClear();
+
+    for (const char of inputStr) {
+      if (char === '.') {
+        await this.page.clickDigit('.');
+      } else if (char === '-') {
+        await this.page.clickOperator('-');
+      } else {
+        await this.page.clickDigit(char);
+      }
+      await new Promise(resolve => setTimeout(resolve, 30));
+    }
+
+    await this.page.clickFunction(fn);
     await this.page.clickEquals();
 
     const actualResult = await this.page.getDisplayValue();

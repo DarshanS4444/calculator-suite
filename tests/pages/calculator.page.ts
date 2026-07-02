@@ -32,7 +32,15 @@ export class CalculatorPage {
   }
 
   async clickFunction(fn: 'sin' | 'cos' | 'tan' | 'sqrt' | 'log'): Promise<void> {
-    await this.page.getByRole('button', { name: fn, exact: true }).click();
+    const functionMap: Record<string, string> = {
+      sin: 'sin',
+      cos: 'cos',
+      tan: 'tan',
+      sqrt: '√',
+      log: 'log',
+    };
+    const buttonText = functionMap[fn];
+    await this.page.getByRole('button', { name: buttonText, exact: true }).click();
   }
 
   async clickEquals(): Promise<void> {
