@@ -1,0 +1,21 @@
+{
+  "name": "calculator-suite",
+  "version": "1.0.0",
+  "description": "E2E suite to validate scientific calculator functionalities",
+  "main": "index.js",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:ui": "playwright test --ui",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report"
+  },
+  "keywords": ["e2e", "test", "playwright", "calculator"],
+  "author": "Darshan",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.47.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.5.0"
+  }
+}
