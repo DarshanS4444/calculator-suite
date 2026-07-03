@@ -1,13 +1,13 @@
 # Calculator Suite — E2E Test Automation
 
-A comprehensive end-to-end test suite for a Scientific Calculator, built with **Playwright** and **TypeScript**. Validates core arithmetic, scientific functions, edge cases, and documents 11 defects discovered during testing.
+A comprehensive end-to-end test suite for a Scientific Calculator, built with **Playwright** and **TypeScript**. Validates core arithmetic, scientific functions, edge cases, and documents 15 defects discovered during testing.
 
 ## 📋 Overview
 
 **Test Coverage:** 88 automated test cases across 4 spec files  
 **Browsers Tested:** Chromium, Firefox, WebKit (cross-browser validation)  
-**Test Results:** 15 passing (sanity tier), 73 expected failures (from 11 documented bugs)  
-**Defects Found:** 11 critical, medium, and low-priority bugs with formal issue reports
+**Test Results:** 15 passing (sanity tier), 73 expected failures (from 14 bugs automated, +1 verified manually)  
+**Defects Found:** 15 critical, medium, and low-priority bugs with formal issue reports
 
 ---
 
@@ -111,14 +111,14 @@ pages/      fixtures/
 
 ### Summary
 
-**11 bugs found** across 3 severity levels:
+**15 bugs found** across 3 severity levels:
 
 | Priority | Count | Impact |
 |----------|-------|--------|
 | Blocker | 3 | Critical arithmetic failures |
 | Critical | 2 | Scientific functions broken |
-| Medium | 4 | Edge cases & error handling |
-| Low | 2 | State/accessibility issues |
+| Medium | 6 | Parser, display state, error handling |
+| Low | 4 | UI/UX & accessibility issues |
 
 ### Full Defect List
 
@@ -127,20 +127,6 @@ See [`docs/BUG-SUMMARY.md`](docs/BUG-SUMMARY.md) for detailed bug reports includ
 - Expected vs. actual behavior
 - Severity & impact
 - Affected test cases
-
-**Quick reference:**
-
-- **BUG-001** (Blocker): Digit "3" cannot be entered
-- **BUG-002** (Blocker): Subtract button performs division
-- **BUG-003** (Blocker): Division result inverted
-- **BUG-004** (Critical): sin() always returns 1
-- **BUG-005** (Medium): sqrt(-x) should return NaN
-- **BUG-006** (Medium): log() edge cases (0, negative values)
-- **BUG-007** (Critical): Divide-by-zero returns raw Infinity
-- **BUG-008** (Medium): Empty input + equals shows "undefined"
-- **BUG-009** (Low): cos(90°) in radians returns wrong value
-- **BUG-010** (Low): Display unreachable by keyboard, no ARIA labels
-- **BUG-011** (Low–Medium): Error state not reset after digit entry
 
 ### Test-to-Bug Mapping
 
@@ -166,8 +152,8 @@ Automated workflow runs on every push to `main`:
 **Workflow:** `.github/workflows/playwright.yml`
 
 **Two parallel jobs:**
-1. **Sanity Tests** — 4 smoke tests (must all pass ✅)
-2. **Full Suite** — All 88 tests (expected failures from known bugs ✅)
+1. **Sanity Tests** — 4 smoke tests 
+2. **Full Suite** — All 88 tests 
 
 **Artifacts:**
 - HTML test reports uploaded after each run
@@ -305,7 +291,6 @@ This test suite validates:
 
 Intentionally not tested:
 - **BUG-010** — Keyboard accessibility (requires DOM modification, not a functional defect)
-- Chained function calls (e.g., `sin(sqrt(4))`) — not typical user flow
 - Very large exponents (e.g., `10^100`) — platform limitation
 - Floating-point precision (e.g., `0.1 + 0.2 ≠ 0.3`) — JavaScript limitation
 - Memory operations (M+, M-, MR, MC) — not implemented in calculator

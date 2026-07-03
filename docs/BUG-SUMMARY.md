@@ -5,7 +5,7 @@ Consolidated defect log for `https://rbihubcodechallenge.github.io/calculator/in
 Individual detailed reports (root cause, test references, suggested fix) are in the `bug-reports/` folder,
 one file per bug ID. This document is the scannable, at-a-glance version.
 
-**Total defects: 11** (3 Blocker · 2 Critical · 3 Medium · 3 Low/Low–Medium)
+**Total defects: 15** (3 Blocker · 2 Critical · 6 Medium · 4 Low)
 
 ---
 
@@ -160,9 +160,9 @@ one file per bug ID. This document is the scannable, at-a-glance version.
 ---
 
 ## BUG-011 — No state reset after "Error"
-**Priority:** Low–Medium
+**Priority:** Low (subsumed by BUG-013)
 
-**Description:** Once the display shows "Error", pressing any digit appends onto it (e.g. "Error5") instead of clearing first. Not dangerous — it just errors again on the next "=" — but an unpolished rough edge.
+**Description:** Once the display shows "Error", pressing any digit appends onto it (e.g. "Error5") instead of clearing first. This is a specific manifestation of BUG-013 — the display never clears after any result, error or success.
 
 **Steps to reproduce:**
 1. Open the calculator.
@@ -175,11 +175,78 @@ one file per bug ID. This document is the scannable, at-a-glance version.
 
 ---
 
+## BUG-012 — No backspace/single-character delete
+**Priority:** Low
+
+**Description:** The calculator provides only a full "Clear" button (C). There is no backspace or delete-one-character button, making it impossible to correct a single mistyped digit without clearing the entire entry.
+
+**Steps to reproduce:**
+1. Open the calculator.
+2. Enter `1234`.
+3. Try to delete just the `4` without clearing all digits.
+4. Observe available buttons.
+
+**Expected:** A backspace or delete button exists to remove one character at a time.
+**Actual:** Only the `C` (Clear All) button is available.
+
+---
+
+## BUG-013 — Display never clears after "=" — next input appends onto the previous result
+**Priority:** Medium
+
+**Description:** After clicking "=" to complete a calculation, the display retains the result. Any new digit or operator clicked then concatenates onto the old result instead of starting fresh. This is the root cause of unexpected calculation results and makes the calculator unusable for consecutive calculations without manually pressing Clear each time.
+
+**Steps to reproduce:**
+1. Open the calculator.
+2. Click `5` → `+` → `3` → `=` (display shows `8`).
+3. Click `2` (without pressing `C` first).
+4. Click `=`.
+5. Observe the display.
+
+**Expected:** After step 3, display shows `2` (new entry started fresh).
+**Actual:** Display shows `82`, and evaluating produces an unexpected result because the old result was concatenated with new input.
+
+---
+
+## BUG-014 — Parser doesn't validate full expression consumption; trailing/malformed characters are silently dropped
+**Priority:** Medium
+
+**Description:** The expression parser stops consuming input as soon as it hits an unrecognized token or operator mismatch, then silently discards everything after it instead of raising an error. This makes it impossible to detect typos or incomplete expressions.
+
+**Steps to reproduce:**
+1. Open the calculator.
+2. Enter `5.069` → `/` → `5` → `*` → `6` → `+` → `9` → `)` (mismatched closing paren).
+3. Click `=`.
+4. Observe the display.
+
+**Expected:** Display shows `Error` (unmatched parenthesis).
+**Actual:** Display evaluates the valid part (`5.069/5*6+9 = 14.918...`) and silently drops the trailing `)`.
+
+---
+
+## BUG-015 — Malformed expressions silently show raw "NaN" instead of "Error"
+**Priority:** Medium
+
+**Description:** The calculator catches exceptions during evaluation but doesn't validate whether the result is `NaN` or `Infinity` — these raw JavaScript values are displayed to the user instead of a handled error message. This also allows incomplete expressions (e.g., `5+` without a second operand) to silently evaluate and return `NaN`.
+
+**Steps to reproduce:**
+1. Open the calculator.
+2. Enter `5` → `.` → `=` (incomplete decimal).
+3. Observe the display.
+4. Separately, enter `5` → `+` → `+` (double operator) → `3` → `=`.
+5. Observe the display.
+
+**Expected:** Both cases display `Error` or a handled error message.
+**Actual:** Both display `NaN`.
+
+---
+
 ## Priority Summary
 
 | Priority | Bug IDs | Count |
 |---|---|---|
 | Blocker | BUG-001, BUG-002, BUG-003 | 3 |
 | Critical | BUG-004, BUG-007 | 2 |
-| Medium | BUG-005, BUG-006, BUG-008 | 3 |
-| Low / Low–Medium | BUG-009, BUG-010, BUG-011 | 3 |
+| Medium | BUG-005, BUG-006, BUG-008, BUG-013, BUG-014, BUG-015 | 6 |
+| Low | BUG-009, BUG-010, BUG-011, BUG-012 | 4 |
+| **Total** | | **15** |

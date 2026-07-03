@@ -1,6 +1,6 @@
 # Test Coverage Report
 
-**88 total test cases** across 4 spec files
+**88 total test cases** across 4 spec files (validates 14 of 15 bugs through automation)
 
 ---
 
